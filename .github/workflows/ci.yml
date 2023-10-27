@@ -28,6 +28,8 @@ jobs:
         docker build -t ${{ env.ecr_uri }}:latest .
         docker tag ${{ env.ecr_uri }}:latest ${{ env.ecr_uri }}:${{ github.sha }}
         docker push ${{ env.ecr_uri }}:${{ github.sha }}
+    - name: Test
+      run: docker pull ${{ env.ecr_uri }}:${{ github.sha }}
     - name: Vision One Container Security Scan Action
       uses: trendmicro/tmas-scan-action@main
       with:
