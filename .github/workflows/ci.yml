@@ -25,7 +25,7 @@ jobs:
       id: docker_build
       run: |
         cd ecs
-        docker build -t mariogame:latest .
+        docker build -t ${{ env.ecr_uri }}:latest .
         docker tag ${{ env.ecr_uri }}:latest ${{ env.ecr_uri }}:${{ github.sha }}
         docker push ${{ env.ecr_uri }}:${{ github.sha }}
     - name: Vision One Container Security Scan Action
