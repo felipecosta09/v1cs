@@ -32,19 +32,19 @@ jobs:
         export TMAS_API_KEY=${{ secrets.TMAS_API_KEY }}
         docker save ${{ env.ecr_uri }}:latest > image.tar
         tmas scan docker-archive:image.tar --malwareScan --saveSBOM > result.json
-        ls -l
         mv SBOM_* SBOM.json
+        ls -l
     - name: 'Upload Scan Result Artifact'
       uses: actions/upload-artifact@v3
       with:
         name: scan-result
-        path: result.json
+        path: tmas/result.json
         retention-days: 30
     - name: 'Upload SBOM Artifact'
       uses: actions/upload-artifact@v3
       with:
         name: sbom
-        path: SBOM.json
+        path: tmas/SBOM.json
         retention-days: 30
     - name: Docker Tag and Push
       id: docker_push
