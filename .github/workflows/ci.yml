@@ -25,8 +25,8 @@ jobs:
       id: docker_build
       run: |
         cd ecs
-        docker build -t ${{ env.ecr_uri }}:latest .
-        docker tag ${{ env.ecr_uri }}:latest ${{ env.ecr_uri }}:${{ github.sha }}
+        docker build -t mariogame:latest .
+        # docker tag ${{ env.ecr_uri }}:latest ${{ env.ecr_uri }}:${{ github.sha }}
     - name: Vision One Container Security Scan Action
       uses: trendmicro/tmas-scan-action@main
       with:
@@ -34,7 +34,7 @@ jobs:
         REGION: us-1
         MALWARE_SCAN: true
         SBOM: true
-        IMAGE: ${{ env.ecr_uri }}:${{ github.sha }}
+        IMAGE: mariogame:latest
         MAX_TOTAL: 100
         MAX_CRITICAL: 100
         MAX_HIGH: 100
@@ -43,7 +43,7 @@ jobs:
         MAX_NEGLIGIBLE: 100
         MAX_UNKNOWN: 100
         SCAN_RESULT_ARTIFACT: result.json # Save as an artifact in GitHub to be able to keep the result of the scan.
-    - name: Push to Amazon ECR
-      id: push-ecr
-      run: docker push ${{ env.ecr_uri }}:${{ github.sha }}
+    # - name: Push to Amazon ECR
+    #   id: push-ecr
+    #   run: docker push ${{ env.ecr_uri }}:${{ github.sha }}
     
