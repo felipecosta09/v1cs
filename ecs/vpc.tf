@@ -10,7 +10,7 @@ resource "aws_subnet" "v1cs-ecs-subnet" {
   vpc_id                  = aws_vpc.v1cs-ecs-vpc.id
   cidr_block              = cidrsubnet(aws_vpc.v1cs-ecs-vpc.cidr_block, 8, 1) ## takes 10.0.0.0/16 --> 10.0.1.0/24
   map_public_ip_on_launch = true
-  availability_zone       = "${var.region}a"
+  availability_zone       = "${var.aws_region}a"
 }
 
 resource "aws_internet_gateway" "v1cs-ecs-igw" {

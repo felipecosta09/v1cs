@@ -45,4 +45,5 @@ resource "aws_ecs_service" "v1cs-ecs-service-nginx" {
   lifecycle {
     ignore_changes = [task_definition]
   }
+  
 }
