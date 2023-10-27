@@ -26,12 +26,14 @@ jobs:
       run: |
         cd ecs
         docker build -t ${{ env.ecr_uri }}:latest .
+        docker save ${{ env.ecr_uri }}:latest > image.tar
         docker tag ${{ env.ecr_uri }}:latest ${{ env.ecr_uri }}:${{ github.sha }}
     - name: Vision One Container Security Scan
       run: |
         cd tmas && chmod +x tmas_install.sh && ./tmas_install.sh
         export TMAS_API_KEY=${{ secrets.TMAS_API_KEY }}
-        tmas scan registry:${{ env.ecr_uri }}:${{ github.sha }} --malwareScan > scan.json
+        tmas scan docker-archive:image.tar --malwareScan
+        # tmas scan registry:${{ env.ecr_uri }}:${{ github.sha }} --malwareScan > scan.json
     - name: Docker Push
       id: docker_push
       run: docker push ${{ env.ecr_uri }}:${{ github.sha }}
