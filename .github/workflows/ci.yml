@@ -31,9 +31,10 @@ jobs:
     - name: Login to Amazon ECR 2
       run: |
         aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 563763293556.dkr.ecr.us-east-1.amazonaws.com
-        curl -s -L https://gist.github.com/raphabot/abae09b46c29afc7c3b918b7b8ec2a5c/raw/ | bash
-        export TMAS_API_KEY=${{ secrets.TMAS_API_KEY }}
-        tmas scan registry:${{ env.ecr_uri }}:${{ github.sha }} --malwareScan
+        tmas --help
+        # curl -s -L https://gist.github.com/raphabot/abae09b46c29afc7c3b918b7b8ec2a5c/raw/ | bash
+        # export TMAS_API_KEY=${{ secrets.TMAS_API_KEY }}
+        # tmas scan registry:${{ env.ecr_uri }}:${{ github.sha }} --malwareScan
     - name: Vision One Container Security Scan Action
       uses: trendmicro/tmas-scan-action@main
       with:
