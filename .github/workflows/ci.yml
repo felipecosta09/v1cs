@@ -33,7 +33,8 @@ jobs:
         docker save ${{ env.ecr_uri }}:latest > image.tar
         tmas scan docker-archive:image.tar --malwareScan --saveSBOM > result.json
         mv SBOM_* SBOM.json
-        ls -l
+        echo "TMAS Scan Result"
+        cat result.json
     - name: 'Upload Scan Result Artifact'
       uses: actions/upload-artifact@v3
       with:
