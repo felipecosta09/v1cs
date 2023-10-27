@@ -2,7 +2,7 @@ resource "aws_vpc" "v1cs-ecs-vpc" {
   cidr_block = "10.0.0.0/16"
 
   tags = {
-    name = "v1cs-ecs-vpc"
+    name = "${var.prefix}-ecs-vpc"
   }
 }
 
@@ -17,7 +17,7 @@ resource "aws_internet_gateway" "v1cs-ecs-igw" {
   vpc_id = aws_vpc.v1cs-ecs-vpc.id
 
   tags = {
-    Name = "v1cs-ecs-igw"
+    Name = "${var.prefix}-ecs-igw"
   }
 }
 

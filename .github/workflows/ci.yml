@@ -3,7 +3,7 @@ name: 'Continuous Integration'
 on: [push, workflow_dispatch]
 env:
   aws_region: us-east-1
-  ecr_uri: 563763293556.dkr.ecr.us-east-1.amazonaws.com/webapp
+  ecr_uri: 563763293556.dkr.ecr.us-east-1.amazonaws.com/mariogame
 
 jobs:
   login:
@@ -21,4 +21,9 @@ jobs:
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v2
+    - name: Docker Build
+      id: docker_build
+      run: |
+        docker build -t ${{ env.ecr_uri }}:latest .
+        docker tag ${{ env.ecr_uri }}:latest ${{ env.ecr_uri }}:${{ github.sha }}
     

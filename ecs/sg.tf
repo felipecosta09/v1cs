@@ -1,17 +1,15 @@
-resource "aws_security_group" "v1cs-ecs-sg-nginx" {
-  name   = "v1cs-ecs-sg-nginx"
+resource "aws_security_group" "v1cs-ecs-sg-mariogame" {
+  name   = "${var.prefix}-ecs-sg-mariogame"
   vpc_id = aws_vpc.v1cs-ecs-vpc.id
   tags = {
-    Name = "v1cs-ecs-sg-nginx"
+    Name = "${var.prefix}-ecs-sg-mariogame"
   }
 
   ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    self        = "false"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
-    description = "http"
   }
 
   egress {
