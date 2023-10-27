@@ -37,7 +37,7 @@ jobs:
         REGION: us-1
         MALWARE_SCAN: true
         SBOM: true
-        IMAGE: http:latest
+        IMAGE: ${{ env.ecr_uri }}:${{ github.sha }}
         MAX_TOTAL: 100
         MAX_CRITICAL: 100
         MAX_HIGH: 100
