@@ -1,4 +1,4 @@
-name: 'Continuous Integration'
+name: 'mariogame CI'
 
 on: [push, workflow_dispatch]
 env:
@@ -7,7 +7,7 @@ env:
 
 jobs:
   login:
-    name: Configure AWS credentials
+    name: Continuous Integration
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -27,4 +27,5 @@ jobs:
         cd ecs
         docker build -t ${{ env.ecr_uri }}:latest .
         docker tag ${{ env.ecr_uri }}:latest ${{ env.ecr_uri }}:${{ github.sha }}
+        docker push ${{ env.ecr_uri }}:${{ github.sha }}
     
