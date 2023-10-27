@@ -29,7 +29,7 @@ jobs:
         docker tag ${{ env.ecr_uri }}:latest ${{ env.ecr_uri }}:${{ github.sha }}
         docker push ${{ env.ecr_uri }}:${{ github.sha }}
     - name: Login to Amazon ECR 2
-      uses: aws-actions/amazon-ecr-login@v2
+      run: $(aws ecr get-login --no-include-email --region us-east-1)
     - name: Vision One Container Security Scan Action
       uses: trendmicro/tmas-scan-action@main
       with:
