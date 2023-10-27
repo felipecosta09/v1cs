@@ -24,6 +24,7 @@ jobs:
     - name: Docker Build
       id: docker_build
       run: |
+        cd ecs
         docker build -t ${{ env.ecr_uri }}:latest .
         docker tag ${{ env.ecr_uri }}:latest ${{ env.ecr_uri }}:${{ github.sha }}
     
