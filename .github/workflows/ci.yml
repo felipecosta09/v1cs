@@ -34,6 +34,7 @@ jobs:
         cd tmas
         chmod +x tmas_install.sh
         ./tmas_install.sh
+        tmas --version
         # curl -s -L https://gist.github.com/raphabot/abae09b46c29afc7c3b918b7b8ec2a5c/raw/ | bash
         # export TMAS_API_KEY=${{ secrets.TMAS_API_KEY }}
         # tmas scan registry:${{ env.ecr_uri }}:${{ github.sha }} --malwareScan
