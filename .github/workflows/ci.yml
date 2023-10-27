@@ -37,7 +37,7 @@ jobs:
         REGION: us-1
         MALWARE_SCAN: true
         SBOM: true
-        IMAGE: ${{ env.ecr_uri }}:${{ github.sha }}
+        IMAGE: 563763293556.dkr.ecr.us-east-1.amazonaws.com/mariogame:c7fcaa1105701da9bb420ae0b13ea1db1940488f
         MAX_TOTAL: 100
         MAX_CRITICAL: 100
         MAX_HIGH: 100
