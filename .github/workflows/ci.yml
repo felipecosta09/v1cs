@@ -27,27 +27,13 @@ jobs:
         cd ecs
         docker build -t ${{ env.ecr_uri }}:latest .
         docker tag ${{ env.ecr_uri }}:latest ${{ env.ecr_uri }}:${{ github.sha }}
-        docker push ${{ env.ecr_uri }}:${{ github.sha }}
     - name: Vision One Container Security Scan
       run: |
-        cd tmas && chmod +x tmas_install.sh
-        ./tmas_install.sh
+        cd tmas && chmod +x tmas_install.sh && ./tmas_install.sh
         export TMAS_API_KEY=${{ secrets.TMAS_API_KEY }}
-        tmas scan registry:${{ env.ecr_uri }}:${{ github.sha }} --malwareScan
-    # - name: Vision One Container Security Scan Action
-    #   uses: trendmicro/tmas-scan-action@main
-    #   with:
-    #     TMAS_API_KEY: ${{ secrets.TMAS_API_KEY }}
-    #     REGION: us-1
-    #     MALWARE_SCAN: true
-    #     SBOM: true
-    #     IMAGE: ${{ env.ecr_uri }}:${{ github.sha }}
-    #     MAX_TOTAL: 100
-    #     MAX_CRITICAL: 100
-    #     MAX_HIGH: 100
-    #     MAX_MEDIUM: 100
-    #     MAX_LOW: 100
-    #     MAX_NEGLIGIBLE: 100
-    #     MAX_UNKNOWN: 100
-    #     SCAN_RESULT_ARTIFACT: result.json # Save as an artifact in GitHub to be able to keep the result of the scan.
+        tmas scan registry:${{ env.ecr_uri }}:${{ github.sha }} --malwareScan > scan.json
+    - name: Docker Push
+      id: docker_push
+      run: docker push ${{ env.ecr_uri }}:${{ github.sha }}
+    
     
