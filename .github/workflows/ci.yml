@@ -77,6 +77,7 @@ jobs:
         cd ecs
         terraform init
         terraform plan
+        terraform apply -auto-approve -var "image_uri=${{ env.ecr_uri }}:${{ github.sha }}"
 
     
     
