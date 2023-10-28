@@ -55,6 +55,7 @@ jobs:
   deploy:      
     name: Continuous Delivery
     needs: login
+    environment: production
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
