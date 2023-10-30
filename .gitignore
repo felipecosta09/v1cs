@@ -3,3 +3,5 @@ ecs/.terraform/terraform.tfstate
 ecs/.terraform/providers/registry.terraform.io/hashicorp/aws/5.23.1/darwin_arm64/terraform-provider-aws_v5.23.1_x5
 .DS_Store
 k8s/.terraform*/*
+k8s/.terraform.lock.hcl
+k8s/.terraform/terraform.tfstate
