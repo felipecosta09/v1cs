@@ -2,3 +2,15 @@ ecs/.terraform.lock.hcl
 ecs/.terraform/terraform.tfstate
 ecs/.terraform/providers/registry.terraform.io/hashicorp/aws/5.23.1/darwin_arm64/terraform-provider-aws_v5.23.1_x5
 .DS_Store
+k8s/.terraform.lock.hcl
+k8s/.terraform/terraform.tfstate
+k8s/.terraform/modules/modules.json
+k8s/.terraform/providers/registry.terraform.io/hashicorp/aws/5.23.1/darwin_arm64/terraform-provider-aws_v5.23.1_x5
+k8s/.terraform/providers/registry.terraform.io/hashicorp/cloudinit/2.3.2/darwin_arm64/terraform-provider-cloudinit_v2.3.2_x5
+k8s/.terraform/providers/registry.terraform.io/hashicorp/kubernetes/2.23.0/darwin_arm64/terraform-provider-kubernetes_v2.23.0_x5
+k8s/.terraform/providers/registry.terraform.io/hashicorp/null/3.1.0/darwin_arm64/terraform-provider-null_v3.1.0_x5
+k8s/.terraform/providers/registry.terraform.io/hashicorp/null/3.2.1/darwin_arm64/terraform-provider-null_v3.2.1_x5
+k8s/.terraform/providers/registry.terraform.io/hashicorp/random/3.1.0/darwin_arm64/terraform-provider-random_v3.1.0_x5
+k8s/.terraform/providers/registry.terraform.io/hashicorp/random/3.5.1/darwin_arm64/terraform-provider-random_v3.5.1_x5
+k8s/.terraform/providers/registry.terraform.io/hashicorp/time/0.9.1/darwin_arm64/terraform-provider-time_v0.9.1_x5
+k8s/.terraform/providers/registry.terraform.io/hashicorp/tls/4.0.4/darwin_arm64/terraform-provider-tls_v4.0.4_x5

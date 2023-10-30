@@ -1,36 +1,39 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: java-goof
+  name: webapp
   namespace: demo
   labels:
-    app: java-goof
+    app: webapp
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
-      app: java-goof
+      app: webapp
   template:
     metadata:
       labels:
-        app: java-goof
+        app: webapp
     spec:
       containers:
-      - name: java-goof
-        image: raphabot/java-goof
+      - name: webapp
+        image: 563763293556.dkr.ecr.us-east-1.amazonaws.com/webapp
         ports:
         - containerPort: 80
+        securityContext:
+          allowPrivilegeEscalation: true
+          privileged: true
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: java-goof-service
+  name: webapp
   namespace: demo
   labels:
-    app: java-goof
+    app: webapp
 spec:
   selector:
-    app: java-goof
+    app: webapp
   type: LoadBalancer  
   ports:
   - port: 80

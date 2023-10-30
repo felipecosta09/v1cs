@@ -5,10 +5,10 @@ locals {
 
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "19.16.0"
+  version = "19.17.2"
 
   cluster_name    = local.cluster_name
-  cluster_version = "1.27"
+  cluster_version = "1.28"
   
   vpc_id                         = module.vpc.vpc_id
   subnet_ids                     = module.vpc.private_subnets
@@ -19,20 +19,20 @@ module "eks" {
     ami_type = "AL2_x86_64"
 
   }
-
+  iam_role_additional_policies = {
+        additional = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+      }
   eks_managed_node_groups = {
     node = {
       name = "${var.prefix}-nodes"
       instance_types = ["t3.medium"]
       disk_size       = 20
-      min_size     = 1
+      min_size     = 2
       max_size     = 2
       desired_size = 2
       tags = {
         Environment = var.environment
-
       }
-
     }
 }
 }
