@@ -7,6 +7,8 @@ resource "null_resource" "deploy_v1cs" {
 
     # Add cluster to kubeconfig
     aws --version
+    terraform output -raw region
+    terraform output -raw cluster_name
     aws eks --region $(terraform output -raw region) update-kubeconfig --name $(terraform output -raw cluster_name)
 
     # Create necessary namespaces
