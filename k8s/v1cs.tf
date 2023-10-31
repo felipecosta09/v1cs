@@ -6,11 +6,12 @@ resource "null_resource" "deploy_v1cs" {
     command = <<-EOT
 
     # Add cluster to kubeconfig
-    aws --version
-    export REGION=$(terraform output -raw region)
-    export CLUSTER=$(terraform output -raw cluster_name)
-    echo $REGION $CLUSTER
-    aws eks --region $REGION update-kubeconfig --name $CLUSTER
+    aws eks --region us-east-1 update-kubeconfig --name v1cs-eks-cluster-Anmiw
+    #aws --version
+    #export REGION=$(terraform output -raw region)
+    #export CLUSTER=$(terraform output -raw cluster_name)
+    #echo $REGION $CLUSTER
+    #aws eks --region $REGION update-kubeconfig --name $CLUSTER
 
     # Create necessary namespaces
     kubectl create namespace tigera-operator
