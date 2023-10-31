@@ -51,8 +51,8 @@ jobs:
     - name: Docker Tag and Push
       id: docker_push
       run: |
-        docker tag ${{ env.ecr_uri }}:latest ${{ env.ecr_uri }}:${{ github.sha }}
-        docker push ${{ env.ecr_uri }}:${{ github.sha }}
+        docker tag ${{ env.ecr_uri }}:latest ${{ env.ecr_uri }}:latest
+        docker push ${{ env.ecr_uri }}:latest
   deploy:      
     name: Continuous Delivery
     needs: login
@@ -77,7 +77,7 @@ jobs:
         cd k8s
         terraform init
         terraform plan
-        terraform apply -auto-approve -var "image_uri=${{ env.ecr_uri }}:${{ github.sha }}"
+        terraform apply -auto-approve -var "image_uri=${{ env.ecr_uri }}:latest"
 
     
     
