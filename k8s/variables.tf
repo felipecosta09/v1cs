@@ -13,7 +13,7 @@ variable "environment" {
   default = "dev"
 }
 
-variable "ecr_repo_name" {
+variable "image_uri" {
   type = string
-  default = "563763293556.dkr.ecr.us-east-1.amazonaws.com/webapp"
+  default = ""
 }
