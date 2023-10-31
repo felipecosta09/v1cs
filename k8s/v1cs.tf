@@ -19,6 +19,7 @@ resource "null_resource" "deploy_v1cs" {
     kubectl create namespace attacker
 
     # Install Calico
+    helm repo add projectcalico https://docs.tigera.io/calico/charts
     helm install calico projectcalico/tigera-operator -f deployments/values.yaml --namespace tigera-operator
 
     # Deploy java-goof
