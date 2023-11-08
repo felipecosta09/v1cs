@@ -1,6 +1,6 @@
 name: 'Mariogame CI/CD'
 
-on: [push, workflow_dispatch]
+on: [workflow_dispatch]
 env:
   aws_region: us-east-1
   ecr_uri: 563763293556.dkr.ecr.us-east-1.amazonaws.com/mariogame
