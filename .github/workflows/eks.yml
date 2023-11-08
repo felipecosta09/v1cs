@@ -128,7 +128,7 @@ jobs:
         export CLUSTER_NAME=$(cat cluster_name | tr -d '"')
         aws eks --region us-east-1 update-kubeconfig --name $CLUSTER_NAME
         helm repo add projectcalico https://docs.tigera.io/calico/charts
-        helm install --namespace tigera-operator --create-namespace tigera-operator projectcalico/tigera-operator -f deployments/values.yaml
+        helm upgrade --install --namespace tigera-operator --create-namespace tigera-operator projectcalico/tigera-operator -f deployments/values.yaml
   setup-v1cs:
     name: Setup V1CS
     needs: setup-calico
@@ -149,4 +149,4 @@ jobs:
         terraform output cluster_name > cluster_name
         export CLUSTER_NAME=$(cat cluster_name | tr -d '"')
         aws eks --region us-east-1 update-kubeconfig --name $CLUSTER_NAME
-        helm upgrade --values deployments/overrides.yaml --namespace "trendmicro-system" --create-namespace trendmicro https://github.com/trendmicro/cloudone-container-security-helm/archive/master.tar.gz
+        helm upgrade --install --values deployments/overrides.yaml --namespace "trendmicro-system" --create-namespace trendmicro https://github.com/trendmicro/cloudone-container-security-helm/archive/master.tar.gz
