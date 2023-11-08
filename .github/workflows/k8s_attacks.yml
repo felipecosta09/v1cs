@@ -1,6 +1,7 @@
 name: 'K8S Attacks'
 
-on: [workflow_dispatch]
+on: 
+  workflow_dispatch:
 env:
   aws_region: us-east-1
 
