@@ -123,15 +123,9 @@ jobs:
     - name: Setup Calico
       run: |
         cd k8s
-        terraform output kubeconfig > kubeconfig
         terraform output cluster_name > cluster_name
-        export KUBECONFIG=kubeconfig
         export CLUSTER_NAME=$(cat cluster_name)
         aws eks --region us-east-1 update-kubeconfig --name $CLUSTER_NAME
         kubectl create namespace tigera-operator
         helm repo add projectcalico https://docs.tigera.io/calico/charts
         helm install calico projectcalico/tigera-operator -f deployments/values.yaml --namespace tigera-operator
-
-
-    
-    
