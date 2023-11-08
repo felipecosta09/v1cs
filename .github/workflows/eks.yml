@@ -6,109 +6,110 @@ env:
   ecr_uri: 563763293556.dkr.ecr.us-east-1.amazonaws.com/webapp
 
 jobs:
-  # linter:
-  #   name: Linter
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - name: Checkout
-  #     uses: actions/checkout@v4
-  #   - name: Lint
-  #     run: echo "Linting"
-  # build-webapp:
-  #   name: WebApp Build
-  #   needs: linter
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - name: Checkout
-  #     uses: actions/checkout@v3
-  #   - name: Docker Build
-  #     id: docker_build
-  #     run: |
-  #       cd k8s/app
-  #       docker build -t ${{ env.ecr_uri }}:latest .
-  # container-scan:
-  #   name: Container Security Scan
-  #   needs: build-webapp
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - name: Checkout
-  #     uses: actions/checkout@v4
-  #   - name: Docker Build
-  #     id: docker_build
-  #     run: |
-  #       cd k8s/app
-  #       docker build -t ${{ env.ecr_uri }}:latest .
-  #   - name: Vision One Container Security Scan
-  #     run: |
-  #       cd tmas && chmod +x tmas_install.sh && ./tmas_install.sh
-  #       export TMAS_API_KEY=${{ secrets.TMAS_API_KEY }}
-  #       docker save ${{ env.ecr_uri }}:latest > image.tar
-  #       tmas scan docker-archive:image.tar --malwareScan --saveSBOM > result.json
-  #       mv SBOM_* SBOM.json
-  #       echo "TMAS Scan Result"
-  #       cat result.json
-  #   - name: 'Upload Scan Result Artifact'
-  #     uses: actions/upload-artifact@v3
-  #     with:
-  #       name: scan-result
-  #       path: tmas/result.json
-  #       retention-days: 30
-  #   - name: 'Upload SBOM Artifact'
-  #     uses: actions/upload-artifact@v3
-  #     with:
-  #       name: sbom
-  #       path: tmas/SBOM.json
-  #       retention-days: 30
-  # webapp-push:
-  #   name: WebApp Push
-  #   needs: container-scan
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - name: Checkout
-  #     uses: actions/checkout@v4
-  #   - name: Configure AWS credentials
-  #     uses: aws-actions/configure-aws-credentials@v2
-  #     with:
-  #       aws-access-key-id: ${{ secrets.ACCESS_KEY_ID }}
-  #       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  #       aws-region: ${{ env.aws_region }}
-  #   - name: Login to Amazon ECR
-  #     id: login-ecr
-  #     uses: aws-actions/amazon-ecr-login@v2
-  #   - name: Docker Tag and Push
-  #     id: docker_push
-  #     run: |
-  #       cd k8s/app
-  #       docker build -t ${{ env.ecr_uri }}:latest .
-  #       docker tag ${{ env.ecr_uri }}:latest ${{ env.ecr_uri }}:latest
-  #       docker push ${{ env.ecr_uri }}:latest
-  # deploy:      
-  #   name: Terraform Deploy
-  #   needs: webapp-push
-  #   environment: staging
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - name: Checkout
-  #     uses: actions/checkout@v4
-  #   - name: Configure AWS credentials
-  #     uses: aws-actions/configure-aws-credentials@v2
-  #     with:
-  #       aws-access-key-id: ${{ secrets.ACCESS_KEY_ID }}
-  #       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  #       aws-region: ${{ env.aws_region }}
-  #   - name: Login to Amazon ECR
-  #     id: login-ecr
-  #     uses: aws-actions/amazon-ecr-login@v2
-  #   - name: Setup Terraform
-  #     uses: hashicorp/setup-terraform@v2
-  #   - name: Terraform Deploy
-  #     run: |
-  #       cd k8s
-  #       terraform init
-  #       terraform plan
-  #       terraform apply -auto-approve -var "image_uri=${{ env.ecr_uri }}:latest"
+  linter:
+    name: Linter
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Lint
+      run: echo "Linting"
+  build-webapp:
+    name: WebApp Build
+    needs: linter
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Docker Build
+      id: docker_build
+      run: |
+        cd k8s/app
+        docker build -t ${{ env.ecr_uri }}:latest .
+  container-scan:
+    name: Container Security Scan
+    needs: build-webapp
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Docker Build
+      id: docker_build
+      run: |
+        cd k8s/app
+        docker build -t ${{ env.ecr_uri }}:latest .
+    - name: Vision One Container Security Scan
+      run: |
+        cd tmas && chmod +x tmas_install.sh && ./tmas_install.sh
+        export TMAS_API_KEY=${{ secrets.TMAS_API_KEY }}
+        docker save ${{ env.ecr_uri }}:latest > image.tar
+        tmas scan docker-archive:image.tar --malwareScan --saveSBOM > result.json
+        mv SBOM_* SBOM.json
+        echo "TMAS Scan Result"
+        cat result.json
+    - name: 'Upload Scan Result Artifact'
+      uses: actions/upload-artifact@v3
+      with:
+        name: scan-result
+        path: tmas/result.json
+        retention-days: 30
+    - name: 'Upload SBOM Artifact'
+      uses: actions/upload-artifact@v3
+      with:
+        name: sbom
+        path: tmas/SBOM.json
+        retention-days: 30
+  webapp-push:
+    name: WebApp Push
+    needs: container-scan
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.aws_region }}
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+    - name: Docker Tag and Push
+      id: docker_push
+      run: |
+        cd k8s/app
+        docker build -t ${{ env.ecr_uri }}:latest .
+        docker tag ${{ env.ecr_uri }}:latest ${{ env.ecr_uri }}:latest
+        docker push ${{ env.ecr_uri }}:latest
+  deploy:      
+    name: Terraform Deploy
+    needs: webapp-push
+    environment: staging
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.aws_region }}
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+    - name: Terraform Deploy
+      run: |
+        cd k8s
+        terraform init
+        terraform plan
+        terraform apply -auto-approve -var "image_uri=${{ env.ecr_uri }}:latest"
   setup-calico:
     name: Setup Calico
+    needs: deploy
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -130,6 +131,7 @@ jobs:
         helm upgrade --install --namespace tigera-operator --create-namespace tigera-operator projectcalico/tigera-operator -f deployments/values.yaml
   setup-v1cs:
     name: Setup V1CS
+    needs: deploy
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
