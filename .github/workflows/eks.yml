@@ -6,22 +6,33 @@ env:
   ecr_uri: 563763293556.dkr.ecr.us-east-1.amazonaws.com/webapp
 
 jobs:
-  login:
-    name: Continuous Integration
-    environment: staging
+  linter:
+    name: Linter
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v3
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v2
-      with:
-        aws-access-key-id: ${{ secrets.ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ env.aws_region }}
-    - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v2
+    - name: Lint
+      run: echo "Linting"
+  build-webapp:
+    name: WebApp Build
+    needs: linter
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Docker Build
+      id: docker_build
+      run: |
+        cd k8s/app
+        docker build -t ${{ env.ecr_uri }}:latest .
+  container-scan:
+    name: Container Security Scan
+    needs: build-webapp
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
     - name: Docker Build
       id: docker_build
       run: |
@@ -48,14 +59,32 @@ jobs:
         name: sbom
         path: tmas/SBOM.json
         retention-days: 30
+  webapp-push:
+    name: WebApp Push
+    needs: container-scan
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.aws_region }}
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
     - name: Docker Tag and Push
       id: docker_push
       run: |
+        cd k8s/app
+        docker build -t ${{ env.ecr_uri }}:latest .
         docker tag ${{ env.ecr_uri }}:latest ${{ env.ecr_uri }}:latest
         docker push ${{ env.ecr_uri }}:latest
   deploy:      
-    name: Continuous Delivery
-    needs: login
+    name: Terraform Deploy
+    needs: webapp-push
     environment: staging
     runs-on: ubuntu-latest
     steps:
