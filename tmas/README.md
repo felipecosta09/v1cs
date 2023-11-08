@@ -1,3 +1,3 @@
 ## Install TMAS:
 
-curl -s -L https://raw.githubusercontent.com/felipecosta09/v1-demo/main/tmas/tmas_install.sh\?token\=GHSAT0AAAAAACFYGM7T72F7FETL5A4X6TVYZHJIUZQ | bash
+curl -s -L https://gist.githubusercontent.com/felipecosta09/a3d0cf68f4e85fc53bd6d295c1bb2c5b/raw/fafd525ef1bccfe7a460ec29e5f6d8aca397448a/tmas_install.sh | bash
