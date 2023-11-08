@@ -110,6 +110,7 @@ jobs:
   setup-calico:
     name: Setup Calico
     needs: deploy
+    environment: staging
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -132,6 +133,7 @@ jobs:
   setup-v1cs:
     name: Setup V1CS
     needs: deploy
+    environment: staging
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -153,6 +155,7 @@ jobs:
   deploy-cluster:
     name: Deploy Cluster
     needs: [setup-v1cs, setup-calico]
+    environment: staging
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
