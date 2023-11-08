@@ -128,6 +128,5 @@ jobs:
         export CLUSTER_NAME=$(cat cluster_name | tr -d '"')
         echo $CLUSTER_NAME
         aws eks --region us-east-1 update-kubeconfig --name $CLUSTER_NAME
-        kubectl create namespace tigera-operator
         helm repo add projectcalico https://docs.tigera.io/calico/charts
-        helm install calico projectcalico/tigera-operator -f deployments/values.yaml --namespace tigera-operator
+        helm install --namespace tigera-operator --create-namespace tigera-operator projectcalico/tigera-operator -f deployments/values.yaml
