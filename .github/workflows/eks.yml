@@ -126,6 +126,7 @@ jobs:
         terraform init
         terraform output cluster_name > cluster_name
         export CLUSTER_NAME=$(cat cluster_name)
+        echo $CLUSTER_NAME
         # aws eks --region us-east-1 update-kubeconfig --name $CLUSTER_NAME
         # kubectl create namespace tigera-operator
         # helm repo add projectcalico https://docs.tigera.io/calico/charts
