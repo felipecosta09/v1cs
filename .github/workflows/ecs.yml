@@ -6,22 +6,33 @@ env:
   ecr_uri: 563763293556.dkr.ecr.us-east-1.amazonaws.com/mariogame
 
 jobs:
-  login:
-    name: Continuous Integration
-    environment: staging
+  linter:
+    name: Code Linter
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Lint
+      run: echo "Linting"
+  build-mariogame:
+    name: Mariogame Build
+    needs: linter
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v3
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v2
-      with:
-        aws-access-key-id: ${{ secrets.ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ env.aws_region }}
-    - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v2
+    - name: Docker Build
+      id: docker_build
+      run: |
+        cd ecs
+        docker build -t ${{ env.ecr_uri }}:latest .
+  container-scan:
+    name: Container Security Scan
+    needs: build-mariogame
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
     - name: Docker Build
       id: docker_build
       run: |
@@ -48,14 +59,32 @@ jobs:
         name: sbom
         path: tmas/SBOM.json
         retention-days: 30
+  mariogame-push:
+    name: Mariogame Push
+    needs: container-scan
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.aws_region }}
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
     - name: Docker Tag and Push
       id: docker_push
       run: |
+        cd ecs
+        docker build -t ${{ env.ecr_uri }}:latest .
         docker tag ${{ env.ecr_uri }}:latest ${{ env.ecr_uri }}:latest
         docker push ${{ env.ecr_uri }}:latest
   deploy:      
-    name: Continuous Delivery
-    needs: login
+    name: Terraform Deploy
+    needs: mariogame-push
     environment: staging
     runs-on: ubuntu-latest
     steps:
