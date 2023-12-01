@@ -27,9 +27,9 @@ module "eks" {
       name = "${var.prefix}-nodes"
       instance_types = ["t3.medium"]
       disk_size       = 20
-      min_size     = 2
-      max_size     = 2
-      desired_size = 2
+      min_size     = 1
+      max_size     = 1
+      desired_size = 1
       tags = {
         Environment = var.environment
       }
