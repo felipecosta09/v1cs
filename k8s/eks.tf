@@ -25,7 +25,7 @@ module "eks" {
   eks_managed_node_groups = {
     node = {
       name = "${var.prefix}-nodes"
-      instance_types = ["t3.medium"]
+      instance_types = ["t3.small"]
       disk_size       = 20
       min_size     = 1
       max_size     = 2
