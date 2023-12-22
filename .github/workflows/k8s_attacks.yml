@@ -2,9 +2,6 @@ name: 'K8S Attacks'
 
 on: 
   workflow_dispatch:
-  # Runs every 2 hours
-  schedule:
-    - cron: '0 */2 * * *'
 env:
   aws_region: us-east-1
 
