@@ -1,7 +1,6 @@
 name: 'WebApp EKS CI/CD'
 
 on:
-  push:
   workflow_dispatch:
 env:
   aws_region: us-east-1
