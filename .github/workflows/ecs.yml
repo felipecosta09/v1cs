@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 env:
   aws_region: us-east-1
-  ecr_uri: 563763293556.dkr.ecr.us-east-1.amazonaws.com/mariogame
+  ecr_uri: 072799494071.dkr.ecr.us-east-1.amazonaws.com/mariogame
 
 jobs:
   linter:
@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Docker Build
       id: docker_build
       run: |
@@ -44,18 +44,18 @@ jobs:
         cd tmas && chmod +x tmas_install.sh && ./tmas_install.sh
         export TMAS_API_KEY=${{ secrets.TMAS_API_KEY }}
         docker save ${{ env.ecr_uri }}:latest > image.tar
-        tmas scan docker-archive:image.tar --malwareScan --saveSBOM > result.json
+        tmas scan docker-archive:image.tar -r eu-central-1 --malwareScan --saveSBOM > result.json
         mv SBOM_* SBOM.json
         echo "TMAS Scan Result"
         cat result.json
     - name: 'Upload Scan Result Artifact'
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: scan-result
         path: tmas/result.json
         retention-days: 30
     - name: 'Upload SBOM Artifact'
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: sbom
         path: tmas/SBOM.json
@@ -90,7 +90,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v2
       with:
