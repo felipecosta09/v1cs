@@ -5,6 +5,7 @@ on:
 env:
   aws_region: us-east-1
   ecr_uri: 072799494071.dkr.ecr.us-east-1.amazonaws.com/webapp
+  v1_region: eu-central-1
 
 jobs:
   linter:
@@ -44,7 +45,7 @@ jobs:
         cd tmas && chmod +x tmas_install.sh && ./tmas_install.sh
         export TMAS_API_KEY=${{ secrets.TMAS_API_KEY }}
         docker save ${{ env.ecr_uri }}:latest > image.tar
-        tmas scan docker-archive:image.tar --malwareScan --saveSBOM > result.json
+        tmas scan docker-archive:image.tar --malwareScan -r ${{ env.v1_region }} --saveSBOM > result.json
         mv SBOM_* SBOM.json
         echo "TMAS Scan Result"
         cat result.json
