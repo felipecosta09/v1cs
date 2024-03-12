@@ -6,3 +6,5 @@ k8s/.terraform*/*
 k8s/.terraform.lock.hcl
 k8s/.terraform/terraform.tfstate
 k8s/app/app.js
+*app.js*
+ec2/webapp/app.js
