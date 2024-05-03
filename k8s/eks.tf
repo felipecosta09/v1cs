@@ -65,11 +65,11 @@ module "eks" {
     one = {
       name = local.node_group_name
 
-      instance_types = ["t3.small"]
+      instance_types = ["t3.large"]
 
       min_size     = 1
       max_size     = 3
-      desired_size = 2
+      desired_size = 3
       tags = {
         Name = local.node_group_name
         Environment = var.environment
